@@ -5,7 +5,7 @@ var Movie = Backbone.Model.extend({
   },
 
   toggleLike: function() {
-    // your code here
+    this.set('like', !this.get('like'));
   }
 
 });
@@ -16,12 +16,17 @@ var Movies = Backbone.Collection.extend({
 
   initialize: function() {
     // your code here
+    this.on("change", function() {
+      this.sort();
+    });
   },
 
   comparator: 'title',
 
   sortByField: function(field) {
-    // your code here
+    var needToSort = this.comparator !== field;
+    this.comparator = field;
+    this.sort();
   }
 
 });
