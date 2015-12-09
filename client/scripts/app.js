@@ -20,11 +20,29 @@ var Movies = Backbone.Collection.extend({
 
   },
 
-  comparator: 'title',
+  sortField: 'title',
+
+  sortForward: true, // will be set to false if we want to sort backward
+  //comparator: 'title',
+
+  comparator: function(movie1, movie2) {
+    var a = movie1.get(this.sortField);
+    var b = movie2.get(this.sortField);
+
+    if (this.sortForward) {
+      return (a <= b) ? -1 : 1;
+    } else {
+      return (b <= a) ? -1 : 1;
+    }
+  },
 
   sortByField: function(field) {
-    var needToSort = this.comparator !== field;
-    this.comparator = field;
+    if (this.sortField === field) {
+      this.sortForward = !this.sortForward;
+    } else {
+      this.sortForward = true;
+    }
+    this.sortField = field;
     this.sort();
   }
 
